@@ -22,9 +22,7 @@ jobs:
 
       - name: Authenticate to Salesforce
         run: |
-          echo ${{ secrets.SF_AUTH_URL }} > ./sfdx-auth-url.txt
-          sf org login sfdx-url -f ./sfdx-auth-url.txt --alias CICDOrg --set-default
-          rm ./sfdx-auth-url.txt
+          echo "${{ secrets.SF_AUTH_URL }}" | sf org login sfdx-url --alias CICDOrg --set-default
 
       - name: Deploy source and run tests
         run: sf project deploy start --source-dir force-app --target-org CICDOrg --test-level RunLocalTests
