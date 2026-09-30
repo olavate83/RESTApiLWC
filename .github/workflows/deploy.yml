@@ -23,7 +23,7 @@ jobs:
       - name: Authenticate to Salesforce
         run: |
           echo ${{ secrets.SF_AUTH_URL }} > ./sfdx-auth-url.txt
-          sfdx force:auth:sfdxurl:store -f ./sfdx-auth-url.txt -a CICDOrg -d
+          sf org login sfdx-url -f ./sfdx-auth-url.txt --alias CICDOrg --set-default
           rm ./sfdx-auth-url.txt
 
       - name: Deploy source and run tests
