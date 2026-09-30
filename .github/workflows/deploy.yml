@@ -12,21 +12,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Authenticate and Setup Salesforce CLI
+        uses: salesforceaction/setup-sfdx@v2
         with:
-          node-version: '18'
-
-      - name: Install Salesforce CLI
-        run: npm install @salesforce/cli --global
-
-      - name: Authenticate to Salesforce
-        env:
-          SF_AUTH_URL_VAL: ${{ secrets.SF_AUTH_URL }}
-        run: |
-          echo "$SF_AUTH_URL_VAL" > ./auth.txt
-          sf org login sfdx-url -f ./auth.txt --alias CICDOrg --set-default
-          rm ./auth.txt
+          sfdx-auth-url: ${{ secrets.SF_AUTH_URL }}
+          destination-org-alias: CICDOrg
+          default: true
 
       - name: Deploy source and run tests
         run: sf project deploy start --source-dir force-app --target-org CICDOrg --test-level RunLocalTests
